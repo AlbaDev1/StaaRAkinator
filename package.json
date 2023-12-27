@@ -1,0 +1,19 @@
+{
+  "name": "staaronakinator",
+  "version": "1.0.0",
+  "description": "Chercher StaaR sur Akinator",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index"
+  },
+  "keywords": [],
+  "author": [
+    "AlbaDev",
+    "RobCraft2009"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "puppeteer": "^21.6.1"
+  }
+}
