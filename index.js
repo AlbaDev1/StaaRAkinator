@@ -1,5 +1,8 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
+const folderPath = 'trouve';
+const personnage = 'StaaR';
+const description = 'Streameuse';
 
 function getReponseByQuestion(questionARechercher) {
   try {
@@ -15,7 +18,6 @@ function getReponseByQuestion(questionARechercher) {
 }
 
 async function saveScreenshot(screenshotBuffer) {
-  const folderPath = 'trouve';
   const fileName = `${await getNextScreenshotNumber()}.png`;
   const filePath = `${folderPath}/${fileName}`;
 
@@ -27,8 +29,6 @@ async function saveScreenshot(screenshotBuffer) {
 }
 
 async function getNextScreenshotNumber() {
-  const folderPath = 'trouve';
-
   if (!fs.existsSync(folderPath)) {
       fs.mkdirSync(folderPath);
   }
@@ -72,11 +72,18 @@ async function getNextScreenshotNumber() {
       return spanElement.textContent;
     });
 
+    if(`${content}` === `Un souci technique s'est produit. Merci de réessayer.`){
+      await page.waitForSelector('#a_replay');
+
+      await page.click('#a_replay');
+      await page.waitForTimeout(5000);
+    }else{
+
     const content2 = await page.$eval('span.proposal-subtitle', (spanElement) => {
       return spanElement.textContent;
     });
 
-    if(`${content}` === `StaaR` && `${content2}` ===  `Streameuse`){
+    if(`${content}` === `${personnage}` && `${content2}` ===  `${description}`){
       await page.waitForSelector('#a_propose_yes');
 
       await page.click('#a_propose_yes');
@@ -101,7 +108,7 @@ async function getNextScreenshotNumber() {
 
       await page.waitForSelector(inputSelector);
 
-      await page.type(inputSelector, 'StaaR');
+      await page.type(inputSelector, `${personnage}`);
       await page.waitForSelector('#input-soundlike-search');
       await page.click('#input-soundlike-search');
       await page.waitForTimeout(3000);
@@ -111,7 +118,7 @@ async function getNextScreenshotNumber() {
       for (const link of links) {
         const linkText = await page.evaluate((el) => el.textContent, link);
   
-        if (linkText.includes('StaaR (Streameuse)')) {
+        if (linkText.includes(`${personnage} (${description})`)) {
           await link.click();
           await page.waitForTimeout(2000);
           await page.waitForSelector('#a_replay');
@@ -119,7 +126,6 @@ async function getNextScreenshotNumber() {
           break;
         }
       }
-        
 } catch (error) {
   console.error('Une erreur s\'est produite : ', error);
 }
@@ -128,6 +134,7 @@ async function getNextScreenshotNumber() {
 
       await page.click('#a_continue_yes');
   }
+}
     }
   } else {
   const content = await page.$eval('p.question-text', (pElement) => {
