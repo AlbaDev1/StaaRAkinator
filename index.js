@@ -3,6 +3,14 @@ const fs = require('fs');
 const folderPath = 'trouve';
 const personnage = 'StaaR';
 const description = 'Streameuse';
+const { connect } = require('mongoose');
+const nombres = require('./modals/nombres')
+require('dotenv').config();
+const { token, databaseToken } = process.env;
+
+(async() => {
+  await connect(databaseToken).catch(console.error) 
+})();
 
 function getReponseByQuestion(questionARechercher) {
   try {
@@ -14,6 +22,17 @@ function getReponseByQuestion(questionARechercher) {
   } catch (error) {
     console.error('Erreur lors de la lecture ou du parsing du fichier JSON :', error);
     return null;
+  }
+}
+
+function extraireNombre(phrase) {
+  const match = phrase.match(/\b(\d+)\b/);
+
+  if (match) {
+      const nombre = match[1];
+      return nombre;
+  } else {
+      return null;
   }
 }
 
@@ -89,7 +108,17 @@ async function getNextScreenshotNumber() {
       await page.click('#a_propose_yes');
       await page.waitForTimeout(5000);
       const screenshot = await page.screenshot()
+
+      const content3 = await page.$eval('span.win-subtitle.last-played', (spanElement) => {
+        return spanElement.textContent;
+      });
+
+      const nombre = await extraireNombre(content3)
       
+      const bot = await getNextScreenshotNumber();
+
+      await nombres.updateOne({}, { $set: {total: nombre, bot: bot}})
+
       await saveScreenshot(screenshot);
 
       await page.waitForSelector('#a_replay');
