@@ -2,7 +2,6 @@ const fs = require("fs")
 const args = process.argv.slice(2)
 
 if (args.length === 2) {
-    // Do the stuff
     console.log("Reading input file...")
     const oldQnA = JSON.parse(fs.readFileSync(args[0], {encoding: "utf-8"}))
     console.log("Converting to new format...")

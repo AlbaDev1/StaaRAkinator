@@ -19,7 +19,6 @@ client.on('messageCreate', message => {
     if (message.content.startsWith(config.discord.prefix + 'akinator')) {
         const embed = new EmbedBuilder().setTitle("StaaRAkinator stats")
         const data = db.selectAll()
-        console.log(data)
         const current = data.find(row => row.character === config.main.character.name)
         embed.addFields({name: "Current caracter: " + config.main.character.name, value: current === undefined ? "No data to display." : `Found by this bot: ${current.bot}\nFound in total: ${current.total}`})
         for (const row of data) {
