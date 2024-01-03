@@ -1,0 +1,17 @@
+{
+    "mainModule": true,
+    "discordIntegration": false,
+    "enableDebug": false,
+    "main": {
+        "character": {
+            "name": "StaaR",
+            "description": "Streameuse"
+        },
+        "baseURL": "https://fr.akinator.com/",
+        "saveScreenshots": true,
+        "screenshotFolder": "screenshots"
+    },
+    "discord": {
+        "prefix": "alba!"
+    }
+}

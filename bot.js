@@ -1,38 +1,33 @@
-const fs = require('fs');
-const { connect } = require('mongoose');
-const nombres = require('./modals/nombres')
-require('dotenv').config();
-const { token, databaseToken } = process.env;
+const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
+const db = require('./databaseManager.js');
+const config = require('./config.json')
 
-(async() => {
-  await connect(databaseToken).catch(console.error) 
-})();
-
-const { Client } = require('discord.js-selfbot-v13');
 const client = new Client({
-    checkUpdate: false
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildMembers,
+    ],
 });
 
-client.on('ready', async () => {
-  console.log(`${client.user.username} est prêt !`);
+client.on('ready', () => {
+    console.log(`${client.user.username} est prêt !`);
 })
 
-client.on('messageCreate', async (message) => {
-  if(message.guild.id !== "682949286920585261") return;
-  if(message.content.startsWith('alba!akinator')){
-    await nombres.find()
-    .then(resultats => {
-      resultats.forEach(async resultat => {
-      const cheminDuFichier = 'questions.json';
-const contenuDuFichier = fs.readFileSync(cheminDuFichier, 'utf-8');
-
-const objetJSON = JSON.parse(contenuDuFichier);
-
-const nombreElements = Object.keys(objetJSON).length;
-      message.reply(`**${personnage}** a actuellement été trouvé **${resultat.total}** fois !\nJe l'ai trouvé **${resultat.bot}** fois grâce à **${nombreElements}** questions/réponses !`)
-      })
-    })
-  }
+client.on('messageCreate', message => {
+    if (message.content.startsWith(config.discord.prefix + 'akinator')) {
+        const embed = new EmbedBuilder().setTitle("StaaRAkinator stats")
+        const data = db.selectAll()
+        console.log(data)
+        const current = data.find(row => row.character === config.main.character.name)
+        embed.addFields({name: "Current caracter: " + config.main.character.name, value: current === undefined ? "No data to display." : `Found by this bot: ${current.bot}\nFound in total: ${current.total}`})
+        for (const row of data) {
+            if (row.character === config.main.character.name) continue
+            embed.addFields({name: row.character, value: `Found by this bot: ${row.bot}\nFound in total: ${row.total}`})
+        }
+        message.reply({embeds: [embed]})
+    }
 })
 
-client.login(token);
+client.login(process.env.TOKEN);

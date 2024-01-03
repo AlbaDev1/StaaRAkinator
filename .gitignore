@@ -1,3 +1,19 @@
+# StaaRAkinator ignored files
+config.json
+yetAnotherDatabase.db-wal
+yetAnotherDatabase.db-shm
+yetAnotherDatabase.db
+
+# Old screenshots folder
+trouve/
+# New screenshots folder
+screenshots/
+
+# End of StaaRAkinator ignored files
+
+
+
+# Start of https://mrkandreev.name/snippets/gitignore-generator/#Node
 # Logs
 logs
 *.log
