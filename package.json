@@ -1,0 +1,30 @@
+{
+  "name": "staaronakinator",
+  "version": "1.0.0",
+  "description": "Chercher StaaR sur Akinator",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "keywords": [],
+  "contributors": [
+    {
+      "name": "AlbaDev",
+      "url": "https://github.com/AlbaDev1"
+    },
+    {
+      "name": "RobCraft2009"
+    },
+    {
+      "name": "Christianf67",
+      "url": "https://github.com/christianf67"
+    }
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "better-sqlite3": "^9.2.2",
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.3.1",
+    "puppeteer": "^21.6.1"
+  }
+}
